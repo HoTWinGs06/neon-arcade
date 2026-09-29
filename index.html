@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>NEON PULSE: 198X RETRO ARCADE</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&display=swap');
@@ -10,11 +10,13 @@
         * {
             box-sizing: border-box;
             user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
         }
 
         body {
             margin: 0;
-            padding: 0;
+            padding: 10px;
             background: #020205;
             color: #00ffcc;
             font-family: 'Orbitron', sans-serif;
@@ -49,22 +51,24 @@
         .cabinet {
             position: relative;
             text-align: center;
-            box-shadow: 0 0 60px rgba(0, 255, 204, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.8);
-            border: 4px solid #1a1a3a;
-            border-top: 4px solid #00ffcc;
-            border-radius: 12px;
+            box-shadow: 0 0 40px rgba(0, 255, 204, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.8);
+            border: 3px solid #1a1a3a;
+            border-top: 3px solid #00ffcc;
+            border-radius: 10px;
             background: #080814;
-            padding: 16px;
+            padding: 12px;
+            width: 100%;
+            max-width: 820px;
         }
 
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
-            padding: 0 8px;
+            margin-bottom: 10px;
+            padding: 0 4px;
             font-family: 'Press Start 2P', monospace;
-            font-size: 10px;
+            font-size: 9px;
             text-transform: uppercase;
             color: #ffcc00;
         }
@@ -72,9 +76,9 @@
         .stat-box {
             background: #111122;
             border: 2px solid #333366;
-            padding: 8px 12px;
+            padding: 6px 8px;
             border-radius: 4px;
-            box-shadow: inset 0 0 8px rgba(0, 255, 204, 0.2);
+            box-shadow: inset 0 0 6px rgba(0, 255, 204, 0.2);
         }
 
         .stat-box span {
@@ -84,40 +88,59 @@
         h1 {
             margin: 0;
             font-family: 'Press Start 2P', monospace;
-            font-size: 16px;
+            font-size: 13px;
             color: #ff0055;
-            text-shadow: 3px 3px #00ffcc;
-            letter-spacing: 2px;
+            text-shadow: 2px 2px #00ffcc;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 60%;
+            height: 0;
         }
 
         canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: #000003;
             display: block;
-            border: 3px solid #111122;
+            border: 2px solid #111122;
             border-radius: 4px;
             box-shadow: inset 0 0 25px rgba(0, 255, 204, 0.08);
-            cursor: crosshair;
+            touch-action: none;
         }
 
         .jukebox-bar {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            margin-top: 12px;
+            gap: 6px;
+            margin-top: 10px;
             background: #0d0d1a;
             border: 2px solid #222244;
-            padding: 8px 14px;
+            padding: 8px 10px;
             border-radius: 6px;
-            font-size: 11px;
+            font-size: 10px;
+        }
+
+        .jukebox-bar span {
+            cursor: pointer;
         }
 
         .jukebox-bar select, .jukebox-bar button {
             background: #15152c;
             color: #00ffcc;
             border: 2px solid #00ffcc55;
-            padding: 5px 10px;
+            padding: 6px 8px;
             font-family: 'Press Start 2P', monospace;
-            font-size: 8px;
+            font-size: 7px;
             border-radius: 4px;
             cursor: pointer;
             transition: all 0.2s;
@@ -135,13 +158,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(4, 4, 10, 0.92);
+            background: rgba(4, 4, 10, 0.94);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 10;
             transition: opacity 0.3s ease;
+            padding: 15px;
         }
 
         .hidden {
@@ -153,28 +177,28 @@
             background: #111122;
             color: #00ffcc;
             border: 3px solid #00ffcc;
-            padding: 14px 28px;
+            padding: 12px 24px;
             font-family: 'Press Start 2P', monospace;
-            font-size: 11px;
+            font-size: 10px;
             border-radius: 6px;
             cursor: pointer;
             text-transform: uppercase;
             box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
             transition: all 0.2s ease;
-            margin-top: 15px;
+            margin-top: 12px;
         }
 
         .btn:hover {
             background: #00ffcc;
             color: #020205;
-            box-shadow: 0 0 30px #00ffcc;
+            box-shadow: 0 0 25px #00ffcc;
             transform: scale(1.04);
         }
 
         .controls-hint {
-            margin-top: 15px;
+            margin-top: 12px;
             font-family: 'Press Start 2P', monospace;
-            font-size: 7px;
+            font-size: 6px;
             color: #8888aa;
             line-height: 1.8;
         }
@@ -182,17 +206,24 @@
         .controls-hint kbd {
             background: #1a1a3a;
             border: 1px solid #444488;
-            padding: 2px 5px;
+            padding: 2px 4px;
             color: #ffcc00;
         }
 
         .easter-egg-banner {
-            margin-top: 8px;
+            margin-top: 6px;
             font-family: 'Press Start 2P', monospace;
-            font-size: 8px;
+            font-size: 7px;
             color: #ff00ff;
-            min-height: 14px;
-            text-shadow: 0 0 8px #ff00ff;
+            min-height: 12px;
+            text-shadow: 0 0 6px #ff00ff;
+        }
+
+        @media (max-width: 600px) {
+            header { font-size: 7px; }
+            h1 { font-size: 9px; }
+            .jukebox-bar { font-size: 8px; }
+            .cabinet { padding: 8px; }
         }
     </style>
 </head>
@@ -202,39 +233,39 @@
     <div class="cabinet">
         <header>
             <div class="stat-box">SCORE: <span id="scoreVal">000000</span></div>
-            <h1>NEON PULSE</h1>
+            <h1 id="titleHeader" title="Tap 5 times for God Mode!">NEON PULSE</h1>
             <div class="stat-box">LIVES: <span id="livesVal">3</span></div>
         </header>
 
-        <div style="position: relative;">
-            <canvas id="gameCanvas" width="840" height="500"></canvas>
+        <div class="canvas-wrapper">
+            <canvas id="gameCanvas" width="800" height="500"></canvas>
 
             <div id="menuOverlay" class="overlay">
-                <h2 style="font-family: 'Press Start 2P', monospace; font-size: 22px; color: #ff0055; text-shadow: 3px 3px #00ffcc; margin-bottom: 10px;">NEON PULSE</h2>
-                <p style="font-family: 'Press Start 2P', monospace; color: #ffcc00; font-size: 9px; margin-bottom: 25px;">INSERT COIN / PRESS START</p>
+                <h2 style="font-family: 'Press Start 2P', monospace; font-size: 18px; color: #ff0055; text-shadow: 2px 2px #00ffcc; margin-bottom: 8px;">NEON PULSE</h2>
+                <p style="font-family: 'Press Start 2P', monospace; color: #ffcc00; font-size: 8px; margin-bottom: 20px;">DRAG TOUCH / MOUSE TO PLAY</p>
                 <button class="btn" id="startBtn">START GAME</button>
                 <div class="controls-hint">
-                    MOVE: <kbd>MOUSE</kbd> or <kbd>←</kbd> <kbd>→</kbd><br>
-                    LAUNCH / LASER: <kbd>SPACE</kbd><br>
-                    SECRET KONAMI CODE: <kbd>↑↑↓↓←→←→BA</kbd>
+                    MOBILE: <kbd>DRAG TOUCH TO MOVE</kbd><br>
+                    EASTER EGG: <kbd>TAP TITLE 5 TIMES</kbd> (GOD MODE)<br>
+                    SECRET RICKROLL: <kbd>TAP 'CHIPTUNE' 5 TIMES</kbd>
                 </div>
             </div>
 
             <div id="gameOverOverlay" class="overlay hidden">
-                <h2 id="gameOverTitle" style="font-family: 'Press Start 2P', monospace; font-size: 24px; color: #ff0055; text-shadow: 3px 3px #00ffcc; margin-bottom: 15px;">GAME OVER</h2>
-                <p style="font-family: 'Press Start 2P', monospace; color: #fff; font-size: 10px; margin-bottom: 8px;">FINAL SCORE: <span id="finalScore" style="color: #00ffcc;">0</span></p>
-                <p style="font-family: 'Press Start 2P', monospace; color: #8888aa; font-size: 9px; margin-bottom: 25px;">HIGH SCORE: <span id="highScore" style="color: #ffcc00;">0</span></p>
+                <h2 id="gameOverTitle" style="font-family: 'Press Start 2P', monospace; font-size: 20px; color: #ff0055; text-shadow: 2px 2px #00ffcc; margin-bottom: 12px;">GAME OVER</h2>
+                <p style="font-family: 'Press Start 2P', monospace; color: #fff; font-size: 9px; margin-bottom: 6px;">FINAL SCORE: <span id="finalScore" style="color: #00ffcc;">0</span></p>
+                <p style="font-family: 'Press Start 2P', monospace; color: #8888aa; font-size: 8px; margin-bottom: 20px;">HIGH SCORE: <span id="highScore" style="color: #ffcc00;">0</span></p>
                 <button class="btn" id="restartBtn">PLAY AGAIN</button>
             </div>
         </div>
 
         <div class="jukebox-bar">
-            <span style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: #ff00ff;">🎵 JUKEBOX:</span>
+            <span id="jukeboxLabel" style="font-family: 'Press Start 2P', monospace; font-size: 7px; color: #ff00ff; cursor: pointer;" title="Tap 5 times...">🎵 CHIPTUNE:</span>
             <select id="songSelect">
-                <option value="entertainer">1. The Entertainer (Ragtime)</option>
-                <option value="canon">2. Canon in D (Classical)</option>
-                <option value="minuet">3. Minuet in G (Bach)</option>
-                <option value="ode">4. Ode to Joy (Beethoven)</option>
+                <option value="entertainer">1. The Entertainer</option>
+                <option value="canon">2. Canon in D</option>
+                <option value="minuet">3. Minuet in G</option>
+                <option value="ode">4. Ode to Joy</option>
             </select>
             <div>
                 <button id="playMusicBtn">▶ PLAY</button>
@@ -245,7 +276,7 @@
     </div>
 
     <script>
-        // --- WARM MELLOW AUDIO SYNTHESIZER ---
+        // --- AUDIO SYNTHESIZER ---
         class SoundFX {
             constructor() { this.ctx = null; }
             init() {
@@ -281,7 +312,7 @@
 
         const sfx = new SoundFX();
 
-        // --- POLYPHONIC CHIPTUNE SONG JUKEBOX (Full Songs with Melody & Bass) ---
+        // --- POLYPHONIC CHIPTUNE JUKEBOX ---
         class MusicBox {
             constructor() {
                 this.timer = null;
@@ -338,18 +369,11 @@
                 const song = this.songs[this.currentSong];
                 const note = song.notes[this.noteIndex];
                 
-                // Play melody voice
-                if (note.m > 0) {
-                    sfx.playTone(note.m, 'triangle', (60 / song.tempo) * note.d * 0.85, 0.08);
-                }
-                // Play harmony bass voice
-                if (note.b > 0) {
-                    sfx.playTone(note.b, 'sine', (60 / song.tempo) * note.d * 0.9, 0.1);
-                }
+                if (note.m > 0) sfx.playTone(note.m, 'triangle', (60 / song.tempo) * note.d * 0.85, 0.08);
+                if (note.b > 0) sfx.playTone(note.b, 'sine', (60 / song.tempo) * note.d * 0.9, 0.1);
 
                 this.noteIndex = (this.noteIndex + 1) % song.notes.length;
-                const delay = (60 / song.tempo) * note.d * 1000;
-                this.timer = setTimeout(() => this.step(), delay);
+                this.timer = setTimeout(() => this.step(), (60 / song.tempo) * note.d * 1000);
             }
             stop() {
                 this.isPlaying = false;
@@ -360,9 +384,8 @@
         const jukebox = new MusicBox();
 
         document.getElementById('playMusicBtn').addEventListener('click', () => {
-            const song = document.getElementById('songSelect').value;
-            jukebox.play(song);
-            document.getElementById('easterEggBanner').textContent = '♫ NOW PLAYING FULL SONG ♫';
+            jukebox.play(document.getElementById('songSelect').value);
+            document.getElementById('easterEggBanner').textContent = '♫ NOW PLAYING CHIPTUNE ♫';
         });
         document.getElementById('stopMusicBtn').addEventListener('click', () => {
             jukebox.stop();
@@ -382,6 +405,8 @@
         const startBtn = document.getElementById('startBtn');
         const restartBtn = document.getElementById('restartBtn');
         const easterEggBanner = document.getElementById('easterEggBanner');
+        const titleHeader = document.getElementById('titleHeader');
+        const jukeboxLabel = document.getElementById('jukeboxLabel');
 
         let gameState = 'MENU';
         let score = 0;
@@ -391,7 +416,7 @@
 
         let paddle = {
             x: canvas.width / 2 - 50,
-            y: canvas.height - 30,
+            y: canvas.height - 28,
             width: 100,
             height: 12,
             color: '#00ffcc'
@@ -429,11 +454,11 @@
         let bricks = [];
         const brickRows = 5;
         const brickCols = 10;
-        const brickWidth = 74;
-        const brickHeight = 20;
+        const brickWidth = 70;
+        const brickHeight = 18;
         const brickPadding = 8;
-        const brickOffsetTop = 45;
-        const brickOffsetLeft = 40;
+        const brickOffsetTop = 40;
+        const brickOffsetLeft = 30;
 
         function initLevel() {
             bricks = [];
@@ -455,9 +480,9 @@
 
         let particles = [];
         function spawnParticles(x, y, color) {
-            for (let i = 0; i < 8; i++) {
+            for (let i = 0; i < 7; i++) {
                 const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 4 + 1;
+                const speed = Math.random() * 3.5 + 1;
                 particles.push({
                     x, y,
                     dx: Math.cos(angle) * speed,
@@ -465,7 +490,7 @@
                     radius: Math.random() * 2 + 1,
                     color,
                     life: 1,
-                    decay: 0.04
+                    decay: 0.05
                 });
             }
         }
@@ -475,8 +500,8 @@
             constructor(x, y, type) {
                 this.x = x;
                 this.y = y;
-                this.width = 24;
-                this.height = 12;
+                this.width = 22;
+                this.height = 11;
                 this.dy = 2;
                 this.type = type;
             }
@@ -485,13 +510,14 @@
                 ctx.fillStyle = this.type === 'multiball' ? '#00ff66' : '#ffcc00';
                 ctx.fillRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
                 ctx.fillStyle = '#000';
-                ctx.font = '8px "Press Start 2P"';
+                ctx.font = '7px "Press Start 2P"';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(this.type === 'multiball' ? 'M' : 'E', this.x, this.y);
             }
         }
 
+        // Controls
         let rightPressed = false;
         let leftPressed = false;
 
@@ -504,14 +530,24 @@
             if (e.key === 'ArrowLeft' || e.key === 'a') leftPressed = false;
         });
 
-        canvas.addEventListener('mousemove', (e) => {
+        function handleMove(clientX) {
             const rect = canvas.getBoundingClientRect();
-            paddle.x = (e.clientX - rect.left) - paddle.width / 2;
+            const scaleX = canvas.width / rect.width;
+            const canvasX = (clientX - rect.left) * scaleX;
+            paddle.x = canvasX - paddle.width / 2;
             if (paddle.x < 0) paddle.x = 0;
             if (paddle.x + paddle.width > canvas.width) paddle.x = canvas.width - paddle.width;
-        });
+        }
 
-        // Konami code easter egg
+        canvas.addEventListener('mousemove', (e) => handleMove(e.clientX));
+        canvas.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                handleMove(e.touches[0].clientX);
+            }
+        }, { passive: true });
+
+        // --- EASTER EGGS ---
+        // 1. God Mode (Tap Title Header 5 times or Konami code)
         const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
         let konamiIndex = 0;
         document.addEventListener('keydown', (e) => {
@@ -520,15 +556,38 @@
             if (key === expected) {
                 konamiIndex++;
                 if (konamiIndex === konamiSequence.length) {
-                    godMode = true;
-                    lives = 99;
-                    livesEl.textContent = '99';
-                    easterEggBanner.textContent = '★ SECRET KONAMI GOD MODE UNLOCKED! ★';
-                    sfx.win();
+                    activateGodMode();
                     konamiIndex = 0;
                 }
             } else {
                 konamiIndex = 0;
+            }
+        });
+
+        let titleTapCount = 0;
+        titleHeader.addEventListener('click', () => {
+            titleTapCount++;
+            if (titleTapCount >= 5) {
+                activateGodMode();
+                titleTapCount = 0;
+            }
+        });
+
+        function activateGodMode() {
+            godMode = true;
+            lives = 99;
+            livesEl.textContent = '99';
+            easterEggBanner.textContent = '★ SECRET GOD MODE UNLOCKED! ★';
+            sfx.win();
+        }
+
+        // 2. Rickroll Easter Egg (Tap 'CHIPTUNE' 5 times)
+        let chiptuneTapCount = 0;
+        jukeboxLabel.addEventListener('click', () => {
+            chiptuneTapCount++;
+            if (chiptuneTapCount >= 5) {
+                window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank');
+                chiptuneTapCount = 0;
             }
         });
 
