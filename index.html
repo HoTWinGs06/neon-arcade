@@ -475,7 +475,7 @@
                     });
                 }
             }
-            balls = [new Ball(canvas.width / 2, paddle.y - 12, 3.5, -4.5)];
+            balls = [new Ball(canvas.width / 2, paddle.y - 12, 2.8, -3.6)];
         }
 
         let particles = [];
@@ -615,7 +615,7 @@
                     ball.x <= paddle.x + paddle.width) {
                     
                     let hitPoint = (ball.x - (paddle.x + paddle.width / 2)) / (paddle.width / 2);
-                    ball.dx = hitPoint * 5;
+                    ball.dx = hitPoint * 4;
                     ball.dy = -Math.abs(ball.dy);
                     ball.y = paddle.y - ball.radius;
                     sfx.paddleHit();
